@@ -1,0 +1,19 @@
+#!/bin/bash
+
+cd ~/projects
+
+PROJECT_NAME=$(ls | dmenu | cat)
+
+cd $PROJECT_NAME
+st npm start &
+
+if [[ -d "./server" ]]; then
+	echo "server exists..."
+	cd server
+	st npm run dev & 
+fi
+
+# run vscode
+cd ..
+code .
+
