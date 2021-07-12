@@ -2,7 +2,7 @@
 
 export PATH="$PATH:/home/gabo/scripts:/snap/bin:/usr/sbin"
 
-xwallpaper --zoom ~/Pictures/wallpapers/bridge-2.jpg &
+xwallpaper --zoom ~/pics/wallpapers/bridge-2.jpg &
 xset r rate 250 60 &
 setxkbmap -layout us,ge -option grp:alt_shift_toggle
 compton --no-fading-openclose &
