@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd ~/Pictures/wallpapers
+cd ~/pics/wallpapers
 
 WALLPAPER=$(ls | dmenu)
 OPTION=$(echo -e "zoom\nmaximize" | dmenu)
