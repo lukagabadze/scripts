@@ -2,7 +2,7 @@
 
 cd ~/projects
 
-PROJECT_NAME=$(ls | dmenu | cat)
+PROJECT_NAME=$(ls | dmenu)
 
 cd $PROJECT_NAME
 st npm start &
@@ -14,6 +14,6 @@ if [[ -d "./server" ]]; then
 fi
 
 # run vscode
-cd ..
+cd ~/projects/$PROJECT_NAME 
 code .
 
