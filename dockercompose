@@ -1,11 +1,13 @@
 #!/bin/bash
 
+ENVIRONMENT=$1
+CONTAINER_STATE=$2
 
-if [[ $1 == "prod" ]]; then
-	docker-compose -f docker-compose.yml -f docker-compose.prod.yml $2
+if [[ $ENVIRONMENT == "prod" ]]; then
+	docker-compose -f docker-compose.yml -f docker-compose.prod.yml $CONTAINER_STATE
 fi
 
-if [[ $1 == "dev" ]]; then
-	docker-compose -f docker-compose.yml -f docker-compose.dev.yml $2
+if [[ $ENVIRONEMNT == "dev" ]]; then
+	docker-compose -f docker-compose.yml -f docker-compose.dev.yml $CONTAINER_STATE
 fi
 
