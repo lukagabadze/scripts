@@ -1,0 +1,12 @@
+#!/bin/bash
+
+OPTION=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors | tr ' ' '\n' | dmenu)
+
+echo $OPTION | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+
+NEW_POWER=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor)
+
+echo successfully changed the power usage state to $NEW_POWER
+
+
+
