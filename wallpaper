@@ -5,4 +5,7 @@ cd ~/pics/wallpapers
 WALLPAPER=$(ls | dmenu)
 OPTION=$(echo -e "zoom\nmaximize" | dmenu)
 
+# set the colors with pywal
+#wal -i $WALLPAPER &
+
 xwallpaper --$OPTION $WALLPAPER

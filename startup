@@ -1,9 +1,17 @@
 #!/bin/bash
 
 export PATH="$PATH:/home/gabo/scripts:/snap/bin:/usr/sbin"
+#export GOPATH="~/.config/go"
 
-xwallpaper --zoom ~/pics/wallpapers/bridge-2.jpg &
-xset r rate 250 60 &
+[ -d "$HOME/Library/Android/sdk" ] && ANDROID_SDK=$HOME/Library/Android/sdk || ANDROID_SDK=$HOME/Android/Sdk
+echo "export ANDROID_SDK=$ANDROID_SDK" >> ~/`[[ $SHELL == *"zsh" ]] && echo '.zshenv' || echo '.bash_profile'`
+
+# set trackball sensitivity
+xinput --set-prop "12" "libinput Accel Speed" -0.5
+
+
+xwallpaper --zoom ~/pics/wallpapers/green-boy.jpg &
+xset r rate 180 60 &
 setxkbmap -layout us,ge -option grp:alt_shift_toggle
 compton --no-fading-openclose &
 slstatus &

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+PORT_TO_KILL=$(echo | dmenu)
+kill -9 $(lsof -t -i:$PORT_TO_KILL)
