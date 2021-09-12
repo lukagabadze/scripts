@@ -1,0 +1,28 @@
+#!/bin/sh
+
+cd /tmp
+[ ! -d "/tmp/dotfiles" ] && git clone https://github.com/lukagabadze/dotfiles
+
+DOTFILES="/tmp/dotfiles"
+
+ZSHRC="$HOME/.config/zsh/.zshrc"
+NVIMRC="$HOME/.config/nvim/init.vim"
+COCRC="$HOME/.config/nvim/coc-settings.json"
+
+
+cp $ZSHRC $DOTFILES
+cp $NVIMRC $DOTFILES
+cp $COCRC $DOTFILES
+echo Successfully copied all the config files
+
+cd dotfiles
+git add .
+git status
+
+printf "Does this look right? (y/n): "
+read ANS;
+
+[[ ANS = "n" ]] && echo exiting... && exit
+
+git commit -m "dotfiles change"
+git push
