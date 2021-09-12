@@ -3,6 +3,7 @@
 BRIGHTNESS_DIR="/sys/class/backlight/intel_backlight"
 
 MAX_BRIGHTNESS=$(cat $BRIGHTNESS_DIR/max_brightness)
+BRIGHTNESS=$(cat $BRIGHTNESS_DIR/brightness)
 
 [ -z $MAX_BRIGHTNESS ] && "Could not read max brightness value from $BRIGHTNESS_DIR/max_brightness" && exit
 
@@ -10,11 +11,23 @@ if [ -z $1 ]
 then
 	printf "Enter brightness value (1-$MAX_BRIGHTNESS): " 
 	read BRIGHTNESS
-else
-	BRIGHTNESS=$1
 fi
 
+if [ -z $2 ]
+then
+	[[ $1 ]] && BRIGHTNESS=$1
+else
+	[ $2 = "inc" ] && BRIGHTNESS=$(($BRIGHTNESS+$1))
+	[ $2 = "dec" ] && BRIGHTNESS=$(($BRIGHTNESS-$1))
+fi
+
+
 [ -z $BRIGHTNESS ] && echo "Something went wrong. Exiting..." && exit
+
+
+[ $BRIGHTNESS -gt $MAX_BRIGHTNESS ] && BRIGHTNESS=$MAX_BRIGHTNESS
+[ $BRIGHTNESS -le 0 ] && BRIGHTNESS=100
+
 
 echo $BRIGHTNESS | sudo tee /sys/class/backlight/intel_backlight/brightness > /dev/null
 
