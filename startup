@@ -7,14 +7,15 @@ export PATH="$PATH:/home/gabo/scripts:/snap/bin:/usr/sbin"
 echo "export ANDROID_SDK=$ANDROID_SDK" >> ~/`[[ $SHELL == *"zsh" ]] && echo '.zshenv' || echo '.bash_profile'`
 
 # set trackball sensitivity
-xinput --set-prop "12" "libinput Accel Speed" -0.5
+xinput --set-prop "12" "libinput Accel Speed" -0.6
 
 
 xwallpaper --zoom ~/pics/wallpapers/green-boy.jpg &
+xwallpaper --zoom ~/pics/wallpapers/art_landscape.png &
 xset r rate 180 60 &
 setxkbmap -layout us,ge -option grp:alt_shift_toggle
 compton --no-fading-openclose &
 slstatus &
 
-exec dwm
+#exec dwm
 
