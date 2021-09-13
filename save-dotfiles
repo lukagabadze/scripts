@@ -22,7 +22,9 @@ git status
 printf "Does this look right? (y/n): "
 read ANS;
 
-[[ ANS = "n" ]] && echo exiting... && exit
+[[ $ANS = "n" ]] && echo exiting... && exit
+
+echo $ANS;
 
 git commit -m "dotfiles change"
 git push
