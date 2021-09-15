@@ -21,10 +21,13 @@ git status
 
 printf "Does this look right? (y/n): "
 read ANS;
-
 [[ $ANS = "n" ]] && echo exiting... && exit
 
-echo $ANS;
-
 git commit -m "dotfiles change"
+
+
+printf "Change commit message? (y/n): "
+read ANS;
+[[ $ANS = "y" ]] && git commit --amend
+
 git push
