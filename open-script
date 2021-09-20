@@ -3,7 +3,7 @@
 SCRIPTS_FOLDER=$HOME/scripts
 cd $SCRIPTS_FOLDER
 
-SCRIPT=$(ls | fzf)
+SCRIPT=$(ls | fzf --reverse)
 
 [ -z $SCRIPT ] && echo "File does not exist, exiting..." && exit
 

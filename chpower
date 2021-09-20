@@ -3,6 +3,6 @@
 #cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 POWER_STATE=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor)
 
-notify-send $POWER_STATE
+notify-send $POWER_STATE &
 echo $POWER_STATE
 
