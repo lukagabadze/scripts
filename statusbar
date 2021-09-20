@@ -1,0 +1,11 @@
+#!/bin/sh
+
+get_status() {
+	date
+}
+
+while true
+do
+    xsetroot -name "$(get_status)";
+    sleep 1s;
+done

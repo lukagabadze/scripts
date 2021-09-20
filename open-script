@@ -1,0 +1,11 @@
+#!/bin/sh
+
+SCRIPTS_FOLDER=$HOME/scripts
+cd $SCRIPTS_FOLDER
+
+SCRIPT=$(ls | fzf)
+
+[ -z $SCRIPT ] && echo "File does not exist, exiting..." && exit
+
+nvim $SCRIPT
+exit
