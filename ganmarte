@@ -1,0 +1,53 @@
+#!/bin/sh
+
+WORD=$1
+
+if [ -z $WORD ]
+then
+	printf "საძიებო სიტყვა: "
+	read WORD
+fi
+
+WORD=$(echo $WORD | sed 'y/abgdevzTiklmnopJrstufqRySCcZwWxjh/აბგდევზთიკლმნოპჟრსტუფქღყშჩცძწჭხჯჰ/')
+
+
+echo "იძებნება სიტყვები..."
+curl -s -L "https://www.ganmarteba.ge/search/$WORD" > ganmarteba.html
+
+
+ANSWER_TEST=$(sed -n 's:.*<span class="definition">\(.*\)</span>.*:\1:p' ganmarteba.html)
+
+if [[ -z $ANSWER_TEST  ]]
+then
+	grep  "<li><a href" ganmarteba.html > sityvebi.txt
+	rm -rf ganmarteba.html
+	
+	sed -i 's/<b>//' sityvebi.txt            # remove <b> tag
+	sed -i 's/<\/b>//' sityvebi.txt          # remove <b> tag
+	
+	sed -e 's/.*href="\(.*\)".*/\1/' sityvebi.txt > linkebi.txt # grab links to all the words
+
+	sed -i 's/<\/\?[^>]\+>//g' sityvebi.txt  # get content inside anchor tags
+	sed -i 's/^ *//g' sityvebi.txt           # remove all the white space
+	
+	ARCHEVANI=$(cat sityvebi.txt | cat -n | fzf --layout=reverse)
+	INDEX=$(echo $ARCHEVANI | awk '{ print $1 }')
+	SITYVA=$(echo $ARCHEVANI | awk '{ print $2 }')
+	LINK=$(sed "$INDEX q;d" linkebi.txt)
+	
+	rm -rf sityvebi.txt #cleanup
+	rm -rf linkebi.txt  #cleanup    
+	
+	
+	echo "იძებნება განმარტება..."
+	curl -s -L "https://www.ganmarteba.ge$LINK" > ganmarteba.html
+fi
+
+
+sed -i -n 's:.*<span class="definition">\(.*\)</span>.*:\1:p' ganmarteba.html
+sed -i -e 's/<[^>]*>//g' ganmarteba.html
+
+echo # empty line
+cat ganmarteba.html # answer
+
+rm -rf ganmarteba.html # cleanup
