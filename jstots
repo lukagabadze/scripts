@@ -1,0 +1,12 @@
+#!/bin/sh
+
+jsFiles=$(find -type f | grep .js)
+
+
+for jsPath in $jsFiles
+do
+	tsPath=$(echo $jsPath | sed 's/.js/.tsx/')
+
+	mv $jsPath $tsPath
+	
+done

@@ -1,13 +1,10 @@
 #!/bin/bash
 
-export PATH="$PATH:/home/gabo/scripts:/snap/bin:/usr/sbin"
+export PATH="$PATH:/home/gabo/scripts:/snap/bin:/usr/sbin:/home/gabo/.local/bin"
+export SCREENSHOT_PATH="$HOME/pics/screenshots"
 
-# set trackball sensitivity
-xinput --set-prop "12" "libinput Accel Speed" -0.6
-
+xinput --set-prop "12" "libinput Accel Speed" -0.5 # set trackball sensitivity
 xset r rate 180 60 &
 setxkbmap -layout us,ge -option grp:alt_shift_toggle
 compton --no-fading-openclose &
 slstatus &
-
-#exec dwm
