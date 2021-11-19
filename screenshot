@@ -1,0 +1,40 @@
+#!/bin/sh
+
+# echo "$#" # argument count
+# echo "$@" # argument string
+# echo "$?" # return value of last run function 
+
+get_screenshot_name() {
+	screenshot_name=$( zenity --entry --text="screenshot name:" | sed 's/ /\-/g')
+}
+get_screenshot_path() {
+	screenshot_path="$HOME/pics/screenshots/$screenshot_name.png"
+}
+
+screenshot_save() {
+	get_screenshot_name
+	maim "$screenshot_path" && xclip -sel clip -t image/png -i $screenshot_path
+
+	get_screenshot_path
+	mv $screenshot_path_prev $screenshot_path
+}
+screenshot_tmp() {
+	maim | xclip -selection clipboard -t image/png -i
+}
+
+screenshot_name=$(date "+%e-%m-%G-%T-screenshot")
+get_screenshot_path
+screenshot_path_prev=$screenshot_path
+
+
+[[ "$#" == "0" ]] && screenshot_tmp
+
+while getopts 'nt' flag
+do
+	case "${flag}" in
+		n) screenshot_save ;;
+		t) screenshot_tmp ;;
+	esac
+done
+
+
