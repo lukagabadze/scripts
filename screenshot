@@ -5,21 +5,38 @@
 # echo "$?" # return value of last run function 
 
 get_screenshot_name() {
-	screenshot_name=$( zenity --entry --text="screenshot name:" | sed 's/ /\-/g')
+	name=$( zenity --entry --text="screenshot name:" | sed 's/ /\-/g')
+
+	# check if input is empty
+	[[ $name != "" ]] && screenshot_name=$name 
 }
 get_screenshot_path() {
 	screenshot_path="$HOME/pics/screenshots/$screenshot_name.png"
 }
 
 screenshot_save() {
+	screenshot_mode="save"
+
 	get_screenshot_name
-	maim "$screenshot_path" && xclip -sel clip -t image/png -i $screenshot_path
+	maim "$screenshot_path" && xclip -sel clip -t image/png -i $screenshot_path && send_notification
 
 	get_screenshot_path
 	mv $screenshot_path_prev $screenshot_path
 }
 screenshot_tmp() {
-	maim | xclip -selection clipboard -t image/png -i
+	screenshot_mode="tmp"
+
+	maim | xclip -selection clipboard -t image/png -i && send_notification
+}
+
+send_notification() {
+	notification_message=""
+	[[ $screenshot_mode == "save" ]] && notification_message="Screenshot taken, saved and stored in the clipboard"
+	[[ $screenshot_mode == "tmp" ]] && notification_message="Screenshot taken and stored in the clipboard"
+
+	echo $notification_message
+
+	notify-send "$notification_message"
 }
 
 screenshot_name=$(date "+%e-%m-%G-%T-screenshot")
@@ -29,11 +46,12 @@ screenshot_path_prev=$screenshot_path
 
 [[ "$#" == "0" ]] && screenshot_tmp
 
-while getopts 'nt' flag
+while getopts 'st' flag
 do
 	case "${flag}" in
-		n) screenshot_save ;;
+		s) screenshot_save ;;
 		t) screenshot_tmp ;;
+		*) screenshot_save ;;
 	esac
 done
 
