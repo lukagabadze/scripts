@@ -1,0 +1,60 @@
+#!/bin/bash
+
+
+# keyboard backlight settings directory
+dkbd="/sys/class/leds/tpacpi::kbd_backlight"
+
+max_brightness=$(cat $dkbd/max_brightness)
+min_brightness=0
+new_brightness=$(cat $dkbd/brightness)
+
+function choose-brighntess() {
+	printf "New Brightness ($min_brightness-$max_brightness): "
+	read new_brightness
+}
+function increase_brightness() {
+	new_brightness=$(( $new_brightness + 1 ))
+}
+function decrease_brightness() {
+	new_brightness=$(( $new_brightness - 1 ))
+}
+function toggle_brightness() {
+	increase_brightness
+	new_brightness=$(( $new_brightness % ($max_brightness + 1) ))
+}
+
+
+[[ "$#" == "0" ]] && choose-brighntess
+while getopts "s:idt" opt
+do
+	case $opt in
+		s)
+			new_brightness=$OPTARG
+			break
+			;;
+		i)
+			increase_brightness
+			break
+			;;
+		d)
+			decrease_brightness
+			break
+			;;
+		t)
+			toggle_brightness
+			break
+			;;
+		*)
+			exit 1
+			;;
+
+	esac
+done
+
+
+[[ $new_brightness -lt $min_brightness ]] && new_brightness=$min_brightness
+[[ $new_brightness -gt $max_brightness ]] && new_brightness=$max_brightness
+
+echo $new_brightness | sudo tee $dkbd/brightness > /dev/null
+
+echo "Keyboard backlight has been set to $new_brightness!"
