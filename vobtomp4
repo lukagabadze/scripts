@@ -1,6 +1,0 @@
-#!/bin/sh
-
-for file in ./*
-do
-	ffmpeg -i $file ${file%%VOB}mp4
-done
