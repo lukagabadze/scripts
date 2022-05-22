@@ -1,11 +1,33 @@
 #!/bin/bash
 
-cd ~/pics/wallpapers
+WP_CONFIG_PATH="$HOME/.config/wallpaper"
+WP_DIR_PATH="$HOME/pics/wallpapers"
+OPTION="zoom"
 
-WALLPAPER=$(ls | dmenu)
-OPTION=$(echo -e "zoom\nmaximize" | dmenu)
+WALLPAPER=$(ls "$WP_DIR_PATH" | dmenu)
+WP_PATH="$WP_DIR_PATH/$WALLPAPER"
 
-# set the colors with pywal
-#wal -i $WALLPAPER &
 
-xwallpaper --$OPTION $WALLPAPER
+# set the colors with pywal and compile dwm/st/dmenu
+DWM_PATH="$HOME/repos/dwm"
+ST_PATH="$HOME/repos/st"
+DMENU_PATH="$HOME/repos/dmenu"
+DWM_WAL_CONFIG="$HOME/.cache/wal/colors-wal-dwm.h"
+echo $DWM_WAL_CONFIG
+
+wal -i $WP_PATH
+awk -i inplace '$1 != "[SchemeUrg]" {print}' "$DWM_WAL_CONFIG"
+
+printf "Compiling dwm: "
+cd $DWM_PATH && sudo make clean install > /dev/null 2>&1 && echo "Done!" || echo "Failed..."
+
+printf "Compiling st: "
+cd $ST_PATH && sudo make clean install > /dev/null 2>&1 && echo "Done!" || echo "Failed..."
+
+printf "Compiling dmenu: "
+cd $DMENU_PATH && sudo make clean install > /dev/null 2>&1 && echo "Done!" || echo "Failed..."
+
+
+
+xwallpaper --$OPTION $WP_PATH
+cp $WP_PATH $WP_CONFIG_PATH
