@@ -1,13 +1,9 @@
 #!/bin/bash
 
-# TODO move exports to .profile
-export PATH="$PATH:/home/gabo/scripts:/usr/sbin:/home/gabo/.local/bin"
-export SCREENSHOT_PATH="$HOME/pics/screenshots"
-export WP_PATH="$HOME/.config/wallpaper"
-
 xwallpaper --zoom $WP_PATH &
 xinput --set-prop "12" "libinput Accel Speed" -0.5 # set trackball sensitivity
 xset r rate 180 60 &
 setxkbmap -layout us,ge -option grp:alt_shift_toggle
 compton --no-fading-openclose &
+/usr/bin/dunst &
 slstatus &
