@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# This script toggles thinklight on/off.
+# It inspects /proc/acpi/ibm/light to achieve this.
+
+LIGHT="/proc/acpi/ibm/light"
+
+[[ ! -e $LIGHT ]] && notify-send -t 2000 "Your machine does not have thinklight!" && exit
+
+
+status=$(cat $LIGHT | awk '/status/ {print $2}')												# current status of the thinklight
+commands=$(cat $LIGHT | grep commands | cut -f 2- | sed 's/, /\n/g')		# all the available commands
+
+
+command=$(echo "$commands" | grep -A1 $status | grep -v $status)   # grab the command after the current status
+																																	 # -A1 option grabs the match and the line after
+																																	 # that followed up with -v discards the status
+																																	 # and only leaves the line after the match
+
+
+[[ $command = "" || -e $command ]] && command=$(echo "$commands" | head -1)  # if the command could not be set just assign the very first command
+																																						 # (this can happen initially when status is undefined,
+																																						 # or when status is the very last command, in which case
+																																						 # we have to start from top again)
+
+
+echo $command | sudo tee $LIGHT > /dev/null			# put the command in the LIGHT file
+																								# this will change the status and trigger the command
