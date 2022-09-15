@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# This script will show a menu of all current mountable partitions.
+# User can choose a partition and the mount point all through dmenu.
+
+
+MOUNT_BASE="/mnt" # base path to mount partitions in
+
+mountable=$(lsblk -pr | awk '/part $/ {print $1 " (" $4 ")"}')  # all mountable partitions
+
+if [[ -z $mountable ]]; then
+	notify-send -t 1000 "No available partitions to mount!"
+	exit
+fi
+
+
+partition=$(echo "$mountable" | dmenu -i -p "Choose partition: " | cut -d " " -f 1)  # choose partition through dmenu
+																																									 # and use cut to take out first field
+																																									 # (/dev/sdX)
+
+[[ -z $partition ]] && exit
+
+
+mountpoint=$(ls /mnt | dmenu -i -p "Choose mountpoint")
+mountpath="$MOUNT_BASE/$mountpoint"
+
+[[ -z $mountpoint ]] && exit
+
+if [[ ! -e $mountpath ]]; then   # create the folder if it doesn't already exist
+	sudo mkdir -p $mountpath
+fi
+
+
+# mount the partition to the mountpath as the wheel group so users can have write permissions
+sudo mount -o gid=wheel,fmask=113,dmask=002 $partition $mountpath && notify-send -t 1500 "$partition succesfully mounted to $mountpath" && exit
+
+# if the mount fails send a notification and exit
+notify-send -t 3000 "Could not mount the partition $partition at $mountpath" && exit

@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# This script will look for mounted partitions under ${MOUNT_BASE}.
+# User will be able to choose which partition to umount using dmenu.
+
+MOUNT_BASE="/mnt"
+
+
+partitions=$(
+	lsblk -pr -o MOUNTPOINTS,SIZE | 			# list only mountpoints with their sizes in raw (-r) mode
+	tail -n +2 |													# remove headers (MOUNTPOINT SIZE)
+	grep "$MOUNT_BASE" |									# We find all the partitions containing MOUNT_BASE
+	awk '{ print $1 " (" $2 ")"}' 				# and format them as "MOUNTPOINT (SIZE)" using awk
+)
+
+[[ $partitions = "" ]] && notify-send -t 2000 "No partitions mounted under $MOUNT_BASE to umount" && exit
+
+
+# let the user choose
+partition=$(echo "$partitions" | dmenu -i -p "Which partition do you want to umount? " | cut -d " " -f 1)
+
+[[ -z $partition ]] && exit
+
+
+# mount the partition and exit
+sudo umount $partition && notify-send -t 2000 "$partition succesfully umounted!" && exit
+
+# if umount fails, send a notification and exit
+notify-send -t 3000 "Could not umount the partition $partition, target may be busy" && exit
