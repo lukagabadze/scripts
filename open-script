@@ -1,11 +1,10 @@
 #!/bin/sh
 
-SCRIPTS_FOLDER=$HOME/scripts
-cd $SCRIPTS_FOLDER
+cd $SCRIPTS_HOME
 
 SCRIPT=$(ls | fzf --reverse)
 
 [ -z $SCRIPT ] && echo "File does not exist, exiting..." && exit
 
-nvim $SCRIPT
+$EDITOR $SCRIPT
 exit
