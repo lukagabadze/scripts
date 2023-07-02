@@ -1,0 +1,9 @@
+#!/bin/sh
+
+pwgen -sn 15 1 | xclip -sel c
+notify-send "Password generated and copied to clipboard for 30 seconds!"
+
+sleep 30s
+
+echo "" | xclip -sel c
+notify-send "Clipboard cleared!"
