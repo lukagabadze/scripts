@@ -11,7 +11,7 @@ get_screenshot_name() {
 	[[ $name != "" ]] && screenshot_name=$name 
 }
 get_screenshot_path() {
-	screenshot_path="$HOME/pics/screenshots/$screenshot_name.png"
+	screenshot_path="$SCREENSHOTS/$screenshot_name.png"
 }
 
 screenshot_save() {
