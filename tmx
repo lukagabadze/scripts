@@ -1,4 +1,4 @@
 #!/bin/bash
 
 export CHOSEN_TMUX_SESSION=$(tmux ls -F "#S" | fzf --layout=reverse)
-tmux attach -t $CHOSEN_TMUX_SESSION
+tmux -u attach -t $CHOSEN_TMUX_SESSION
