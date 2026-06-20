@@ -1,0 +1,11 @@
+#!/bin/bash
+total=0
+while IFS= read -r -d '' f; do
+    d=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$f" 2>/dev/null)
+    if [[ -n "$d" ]]; then
+        total=$(echo "$total + $d" | bc)
+    fi
+done < <(find . -type f \( -iname "*.mkv" -o -iname "*.mp4" \) -print0)
+
+hours=$(echo "$total / 3600" | bc -l)
+printf "Total duration: %.2f hours\n" "$hours"
